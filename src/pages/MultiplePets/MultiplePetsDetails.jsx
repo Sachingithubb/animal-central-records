@@ -21,6 +21,7 @@ function FloatingInput({
   onBlur,
   label,
   error,
+  focused,
   type = "text",
   maxLength,
   inputMode,
@@ -29,6 +30,7 @@ function FloatingInput({
   disabled = false,
 }) {
   const hasValue = Boolean(value);
+  const shouldFloat = focused || hasValue;
 
   return (
     <div className="w-full">
@@ -62,7 +64,7 @@ function FloatingInput({
         <label
           htmlFor={id}
           className={`pointer-events-none absolute left-2 px-1 text-[12px] leading-none transition-all duration-150 ${
-            hasValue
+            shouldFloat
               ? "-top-1.25 bg-white"
               : "top-1/2 -translate-y-1/2 bg-white"
           } ${error ? "text-red-500" : "text-[#766F68]"}`}
@@ -97,6 +99,9 @@ export default function MultiplePetsDetails({ isAddPet = false, onCancel }) {
   const selectedListingType = useSelector(
     (state) => state.listing.selectedListingType,
   );
+
+  console.log(selectedListingType);
+  
 
   const isMultipleListing = selectedListingType === "multiple";
 
@@ -933,6 +938,7 @@ export default function MultiplePetsDetails({ isAddPet = false, onCancel }) {
                 value={formData.CARtag}
                 label="C.A.R Tag Number (Optional)"
                 error={hasError("CARtag") ? getFieldError("CARtag") : ""}
+                focused={focusedField === "CARtag"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("CARtag")}
                 onBlur={() => {
@@ -948,7 +954,8 @@ export default function MultiplePetsDetails({ isAddPet = false, onCancel }) {
                 name="petName"
                 value={formData.petName}
                 label="Pet Name (Optional)"
-                error={hasError("petName") ? getFieldError("petName") : ""}
+                error={hasError("petName") ? getFieldError("petName") : ""}        
+                focused={focusedField === "petName"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("petName")}
                 onBlur={() => {
@@ -1580,6 +1587,7 @@ export default function MultiplePetsDetails({ isAddPet = false, onCancel }) {
                 error={
                   hasError("sourceNumber") ? getFieldError("sourceNumber") : ""
                 }
+                focused={focusedField === "sourceNumber"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("sourceNumber")}
                 onBlur={() => {
@@ -1603,6 +1611,7 @@ export default function MultiplePetsDetails({ isAddPet = false, onCancel }) {
                 name="implanterNumber"
                 value={formData.implanterNumber}
                 label="Implanter Number (VIC Only)"
+                focused={focusedField === "implanterNumber"}
                 maxLength={15}
                 inputMode="numeric"
                 pattern="[0-9]{15}"
@@ -1640,6 +1649,7 @@ export default function MultiplePetsDetails({ isAddPet = false, onCancel }) {
                     ? getFieldError("breederSupplyNumber")
                     : ""
                 }
+                focused={focusedField === "breederSupplyNumber"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("breederSupplyNumber")}
                 onBlur={() => {

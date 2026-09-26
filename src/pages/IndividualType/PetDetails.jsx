@@ -1,12 +1,6 @@
 import ListingStepper from "../../components/listing/ListingStepper";
 import { useEffect, useState } from "react";
-import {
-  ChevronLeft,
-  CalendarDays,
-  X,
-  CheckCircle,
-  Trash2,
-} from "lucide-react";
+import { ChevronLeft, CalendarDays, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setPetsDetails } from "../../redux/listingSlice";
@@ -21,6 +15,7 @@ function FloatingInput({
   onBlur,
   label,
   error,
+  focused,
   type = "text",
   maxLength,
   inputMode,
@@ -29,6 +24,7 @@ function FloatingInput({
   disabled = false,
 }) {
   const hasValue = Boolean(value);
+  const shouldFloat = focused || hasValue;
 
   return (
     <div className="w-full">
@@ -62,7 +58,7 @@ function FloatingInput({
         <label
           htmlFor={id}
           className={`pointer-events-none absolute left-2 px-1 text-[12px] leading-none transition-all duration-150 ${
-            hasValue
+            shouldFloat
               ? "-top-1.25 bg-white"
               : "top-1/2 -translate-y-1/2 bg-white"
           } ${error ? "text-red-500" : "text-[#766F68]"}`}
@@ -95,6 +91,9 @@ export default function PetDetails() {
   const selectedListingType = useSelector(
     (state) => state.listing.selectedListingType,
   );
+
+  console.log(selectedListingType);
+  
 
   const isIndividualListing = selectedListingType === "individual";
 
@@ -916,6 +915,7 @@ export default function PetDetails() {
                 value={formData.CARtag}
                 label="C.A.R Tag Number (Optional)"
                 error={hasError("CARtag") ? getFieldError("CARtag") : ""}
+                focused={focusedField === "CARtag"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("CARtag")}
                 onBlur={() => {
@@ -932,6 +932,7 @@ export default function PetDetails() {
                 value={formData.petName}
                 label="Pet Name (Optional)"
                 error={hasError("petName") ? getFieldError("petName") : ""}
+                focused={focusedField === "petName"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("petName")}
                 onBlur={() => {
@@ -1563,6 +1564,7 @@ export default function PetDetails() {
                 error={
                   hasError("sourceNumber") ? getFieldError("sourceNumber") : ""
                 }
+                focused={focusedField === "sourceNumber"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("sourceNumber")}
                 onBlur={() => {
@@ -1587,6 +1589,7 @@ export default function PetDetails() {
                 value={formData.implanterNumber}
                 label="Implanter Number (VIC Only)"
                 maxLength={15}
+                focused={focusedField === "implanterNumber"}
                 inputMode="numeric"
                 pattern="[0-9]{15}"
                 error={
@@ -1623,6 +1626,7 @@ export default function PetDetails() {
                     ? getFieldError("breederSupplyNumber")
                     : ""
                 }
+                focused={focusedField === "breederSupplyNumber"}
                 onChange={handleChange}
                 onFocus={() => setFocusedField("breederSupplyNumber")}
                 onBlur={() => {

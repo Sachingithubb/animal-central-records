@@ -1,23 +1,10 @@
 import { useState } from "react";
-import {
-  ChevronDown,
-  Phone,
-  LogOut,
-} from "lucide-react";
-import {
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { ChevronDown, Phone, LogOut } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import {
-  navigationItems,
-  bottomNavigationItems,
-} from "../../data/navigation";
+import { navigationItems, bottomNavigationItems } from "../../data/navigation";
 
-export default function Sidebar({
-  mobileOpen,
-  onClose,
-}) {
+export default function Sidebar({ mobileOpen, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,7 +13,24 @@ export default function Sidebar({
     Profile: false,
   });
 
-  const isActive = (path) => location.pathname === path;
+  // ============================================================
+  // ACTIVE ROUTE
+  // ============================================================
+  const isActive = (path) => {
+    if (!path) return false;
+
+    // Keep "List A Pet" active on every page
+    // inside the /list-pet flow.
+    if (path === "/list-pet") {
+      return (
+        location.pathname === "/list-pet" ||
+        location.pathname.startsWith("/list-pet/")
+      );
+    }
+
+    // All other navigation items use exact matching.
+    return location.pathname === path;
+  };
 
   const handleNavigation = (path) => {
     if (!path) return;
@@ -44,7 +48,9 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile overlay */}
+      {/* ==================================================
+          MOBILE OVERLAY
+      =================================================== */}
       {mobileOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/20 lg:hidden"
@@ -52,44 +58,34 @@ export default function Sidebar({
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* ==================================================
+          SIDEBAR
+      =================================================== */}
       <aside
         className={`
           fixed
           z-50
-
           left-[12px]
           top-[12px]
           bottom-[12px]
-
           w-[235px]
-
           overflow-hidden
-
           rounded-[16px]
-
           bg-[#FFFCF9]
-
           shadow-[0_2px_20px_rgba(80,50,20,0.04)]
-
           transition-transform
           duration-300
-
           lg:static
           lg:ml-[12px]
           lg:my-[12px]
           lg:h-[calc(100vh-24px)]
-
-          ${
-            mobileOpen
-              ? "translate-x-0"
-              : "-translate-x-[270px]"
-          }
-
+          ${mobileOpen ? "translate-x-0" : "-translate-x-[270px]"}
           lg:translate-x-0
         `}
       >
-        {/* Inner content */}
+        {/* ==================================================
+            INNER CONTENT
+        =================================================== */}
         <div className="flex h-full w-full flex-col px-3 py-3">
           {/* ==================================================
               LOGO
@@ -101,17 +97,13 @@ export default function Sidebar({
               shrink-0
               items-center
               justify-center
-
               rounded-[10px]
-
               bg-white
             "
           >
             <div className="text-center">
               <div className="mx-auto flex h-[55px] w-[55px] items-center justify-center">
-                <span className="text-[40px]">
-                  🐾
-                </span>
+                <span className="text-[40px]">🐾</span>
               </div>
 
               <p
@@ -136,26 +128,25 @@ export default function Sidebar({
               {navigationItems.map((item) => {
                 const Icon = item.icon;
 
-                const active =
-                  item.path &&
-                  isActive(item.path);
+                // IMPORTANT:
+                // If item.path is "/list-pet", isActive()
+                // will remain true for every /list-pet/... route.
+                const active = isActive(item.path);
 
-                const expanded =
-                  expandedItems[item.label];
+                const expanded = expandedItems[item.label];
 
                 return (
                   <div key={item.label}>
+                    {/* ==================================================
+                        MAIN NAV ITEM
+                    =================================================== */}
                     <button
                       type="button"
                       onClick={() => {
                         if (item.expandable) {
-                          toggleExpandable(
-                            item.label
-                          );
+                          toggleExpandable(item.label);
                         } else {
-                          handleNavigation(
-                            item.path
-                          );
+                          handleNavigation(item.path);
                         }
                       }}
                       className={`
@@ -170,7 +161,6 @@ export default function Sidebar({
                         text-left
                         text-[12px]
                         transition-colors
-
                         ${
                           active
                             ? "bg-[#FBF0E4] text-[#C87829]"
@@ -178,6 +168,7 @@ export default function Sidebar({
                         }
                       `}
                     >
+                      {/* Active indicator */}
                       {active && (
                         <span
                           className="
@@ -196,16 +187,10 @@ export default function Sidebar({
                       <Icon
                         size={15}
                         strokeWidth={1.8}
-                        className={
-                          active
-                            ? "text-[#C87829]"
-                            : "text-[#583F2B]"
-                        }
+                        className={active ? "text-[#C87829]" : "text-[#583F2B]"}
                       />
 
-                      <span className="flex-1">
-                        {item.label}
-                      </span>
+                      <span className="flex-1">{item.label}</span>
 
                       {item.badge && (
                         <span className="text-[10px] text-[#624A36]">
@@ -220,31 +205,23 @@ export default function Sidebar({
                           className={`
                             transition-transform
                             duration-200
-                            ${
-                              expanded
-                                ? "rotate-180"
-                                : ""
-                            }
+                            ${expanded ? "rotate-180" : ""}
                           `}
                         />
                       )}
                     </button>
 
-                    {item.expandable &&
-                      expanded &&
-                      item.children && (
-                        <div className="ml-8 mt-1 space-y-1">
-                          {item.children.map(
-                            (child) => (
-                              <button
-                                key={child.path}
-                                type="button"
-                                onClick={() =>
-                                  handleNavigation(
-                                    child.path
-                                  )
-                                }
-                                className={`
+                    {/* ==================================================
+                        CHILDREN
+                    =================================================== */}
+                    {item.expandable && expanded && item.children && (
+                      <div className="ml-8 mt-1 space-y-1">
+                        {item.children.map((child) => (
+                          <button
+                            key={child.path}
+                            type="button"
+                            onClick={() => handleNavigation(child.path)}
+                            className={`
                                   block
                                   w-full
                                   rounded-[5px]
@@ -253,20 +230,17 @@ export default function Sidebar({
                                   text-left
                                   text-[11px]
                                   ${
-                                    isActive(
-                                      child.path
-                                    )
+                                    isActive(child.path)
                                       ? "text-[#C87829]"
                                       : "text-[#806B58]"
                                   }
                                 `}
-                              >
-                                {child.label}
-                              </button>
-                            )
-                          )}
-                        </div>
-                      )}
+                          >
+                            {child.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -278,20 +252,15 @@ export default function Sidebar({
           =================================================== */}
           <div className="shrink-0 pt-4">
             <div className="space-y-1">
-              {bottomNavigationItems.map(
-                (item) => {
-                  const Icon = item.icon;
+              {bottomNavigationItems.map((item) => {
+                const Icon = item.icon;
 
-                  return (
-                    <button
-                      key={item.path}
-                      type="button"
-                      onClick={() =>
-                        handleNavigation(
-                          item.path
-                        )
-                      }
-                      className="
+                return (
+                  <button
+                    key={item.path}
+                    type="button"
+                    onClick={() => handleNavigation(item.path)}
+                    className="
                         flex
                         w-full
                         items-center
@@ -304,19 +273,17 @@ export default function Sidebar({
                         text-[#583F2B]
                         hover:bg-[#FCF4EB]
                       "
-                    >
-                      <Icon
-                        size={15}
-                        strokeWidth={1.8}
-                      />
+                  >
+                    <Icon size={15} strokeWidth={1.8} />
 
-                      {item.label}
-                    </button>
-                  );
-                }
-              )}
+                    {item.label}
+                  </button>
+                );
+              })}
 
-              {/* Logout */}
+              {/* ==================================================
+                  LOGOUT
+              =================================================== */}
               <button
                 type="button"
                 className="
@@ -333,15 +300,13 @@ export default function Sidebar({
                   hover:bg-[#FCF4EB]
                 "
               >
-                <LogOut
-                  size={15}
-                  strokeWidth={1.8}
-                />
-
+                <LogOut size={15} strokeWidth={1.8} />
                 Log out
               </button>
 
-              {/* Contact */}
+              {/* ==================================================
+                  CONTACT
+              =================================================== */}
               <button
                 type="button"
                 className="
@@ -377,7 +342,6 @@ export default function Sidebar({
                 >
                   <Phone size={11} />
                 </span>
-
                 Contact Us
               </button>
             </div>

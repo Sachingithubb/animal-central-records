@@ -9,33 +9,25 @@ const ReviewSubmit = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const litterDetails = useSelector(
-    (state) => state.listing.litterDetails,
-  );
+  const litterDetails = useSelector((state) => state.listing.litterDetails);
 
-  const petsDetails = useSelector(
-    (state) => state.listing.petsDetails,
-  );
+  const petsDetails = useSelector((state) => state.listing.petsDetails);
 
-  const ownerDetails = useSelector(
-    (state) => state.listing.ownerDetails,
-  );
+  const ownerDetails = useSelector((state) => state.listing.ownerDetails);
 
-  const ownerType = useSelector(
-    (state) => state.listing.ownerType,
-  );
+  const ownerType = useSelector((state) => state.listing.ownerType);
 
   const selectedListingType = useSelector(
     (state) => state.listing.selectedListingType,
   );
 
+  console.log(selectedListingType);
+
   /* ---------------------------------------------------------------------- */
   /* Listing Type                                                           */
   /* ---------------------------------------------------------------------- */
 
-  const listingType = String(
-    selectedListingType || "",
-  )
+  const listingType = String(selectedListingType || "")
     .trim()
     .toLowerCase();
 
@@ -43,17 +35,11 @@ const ReviewSubmit = () => {
     "/list-pet/individual",
   );
 
-  const routeIsLitter = location.pathname.startsWith(
-    "/list-pet/litter",
-  );
+  const routeIsLitter = location.pathname.startsWith("/list-pet/litter");
 
-  const routeIsMultiple = location.pathname.startsWith(
-    "/list-pet/multiple",
-  );
+  const routeIsMultiple = location.pathname.startsWith("/list-pet/multiple");
 
-  const isIndividualListing =
-    listingType === "individual" ||
-    routeIsIndividual;
+  const isIndividualListing = listingType === "individual" || routeIsIndividual;
 
   const isMultipleListing =
     listingType === "multiple" ||
@@ -76,9 +62,7 @@ const ReviewSubmit = () => {
   const litter = litterDetails || {};
   const owner = ownerDetails?.[0] || {};
 
-  const pets = Array.isArray(petsDetails)
-    ? petsDetails
-    : [];
+  const pets = Array.isArray(petsDetails) ? petsDetails : [];
 
   /* ---------------------------------------------------------------------- */
   /* Stepper                                                                */
@@ -104,10 +88,7 @@ const ReviewSubmit = () => {
    * 3. Owner Details
    * 4. Review & Submit
    */
-  const currentStep =
-    isIndividualListing || isMultipleListing
-      ? 3
-      : 4;
+  const currentStep = isIndividualListing || isMultipleListing ? 3 : 4;
 
   /* ---------------------------------------------------------------------- */
   /* Microchip Number                                                       */
@@ -144,10 +125,7 @@ const ReviewSubmit = () => {
       return colors.filter((color) => color?.trim());
     }
 
-    if (
-      typeof colors === "string" &&
-      colors.trim()
-    ) {
+    if (typeof colors === "string" && colors.trim()) {
       return [colors];
     }
 
@@ -173,16 +151,6 @@ const ReviewSubmit = () => {
   /* ---------------------------------------------------------------------- */
 
   const handleBack = () => {
-    if (isIndividualListing) {
-      navigate("/list-pet/individual/owner-detail");
-      return;
-    }
-
-    if (isMultipleListing) {
-      navigate("/list-pet/multiple/owner-detail");
-      return;
-    }
-
     navigate("/list-pet/litter/owner-detail");
   };
 
@@ -247,9 +215,7 @@ const ReviewSubmit = () => {
 
   const IndividualDetail = ({ label, value }) => (
     <div>
-      <p className="text-[10px] leading-3.25 text-[#A49B93]">
-        {label}
-      </p>
+      <p className="text-[10px] leading-3.25 text-[#A49B93]">{label}</p>
 
       <p className="mt-0.5 text-[11px] font-medium leading-3.25 text-[#514A44]">
         {value || "Text"}
@@ -276,11 +242,7 @@ const ReviewSubmit = () => {
             onClick={handleBack}
             className="absolute left-0 flex items-center gap-1 text-[12px] font-medium text-[#C87829] transition-colors hover:text-[#A95F1D]"
           >
-            <ChevronLeft
-              size={16}
-              strokeWidth={2.5}
-            />
-
+            <ChevronLeft size={16} strokeWidth={2.5} />
             Back
           </button>
 
@@ -304,9 +266,7 @@ const ReviewSubmit = () => {
                 <div className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-4 sm:gap-x-8">
                   <IndividualDetail
                     label="Implant Date"
-                    value={formatDate(
-                      litter.implantDate,
-                    )}
+                    value={formatDate(litter.implantDate)}
                   />
 
                   <IndividualDetail
@@ -314,15 +274,9 @@ const ReviewSubmit = () => {
                     value={formatDate(litter.dob)}
                   />
 
-                  <IndividualDetail
-                    label="Breed"
-                    value={litter.breed}
-                  />
+                  <IndividualDetail label="Breed" value={litter.breed} />
 
-                  <IndividualDetail
-                    label="Species"
-                    value={litter.species}
-                  />
+                  <IndividualDetail label="Species" value={litter.species} />
                 </div>
 
                 <div className="mt-4 flex justify-end">
@@ -352,9 +306,7 @@ const ReviewSubmit = () => {
 
               {pets.length > 0 &&
                 pets.map((pet, index) => {
-                  const colors = getColors(
-                    pet?.colors,
-                  );
+                  const colors = getColors(pet?.colors);
 
                   return (
                     <div
@@ -396,18 +348,12 @@ const ReviewSubmit = () => {
 
                         <IndividualDetail
                           label="C.A.R. Tag (Optional)"
-                          value={
-                            pet?.CARtag ||
-                            pet?.carTag ||
-                            "856565"
-                          }
+                          value={pet?.CARtag || pet?.carTag || "856565"}
                         />
 
                         <IndividualDetail
                           label="Pet Name"
-                          value={
-                            pet?.petName || "Max"
-                          }
+                          value={pet?.petName || "Max"}
                         />
 
                         <IndividualDetail
@@ -417,9 +363,7 @@ const ReviewSubmit = () => {
 
                         <IndividualDetail
                           label="Implant Date"
-                          value={formatDate(
-                            pet?.implantDate,
-                          )}
+                          value={formatDate(pet?.implantDate)}
                         />
 
                         <IndividualDetail
@@ -434,9 +378,7 @@ const ReviewSubmit = () => {
 
                         <IndividualDetail
                           label="Species"
-                          value={
-                            pet?.species || "Text"
-                          }
+                          value={pet?.species || "Text"}
                         />
 
                         <IndividualDetail
@@ -447,34 +389,23 @@ const ReviewSubmit = () => {
                         <IndividualDetail
                           label="Color"
                           value={
-                            colors.length > 0
-                              ? colors.join(", ")
-                              : "Brown"
+                            colors.length > 0 ? colors.join(", ") : "Brown"
                           }
                         />
 
                         <IndividualDetail
                           label="Source Number (VIC Only)"
-                          value={
-                            pet?.sourceNumber ||
-                            "87985"
-                          }
+                          value={pet?.sourceNumber || "87985"}
                         />
 
                         <IndividualDetail
                           label="Implanter Number (VIC Only)"
-                          value={
-                            pet?.implanterNumber ||
-                            "87985"
-                          }
+                          value={pet?.implanterNumber || "87985"}
                         />
 
                         <IndividualDetail
                           label="Breeder Supply Number (QLD Only)"
-                          value={
-                            pet?.breederSupplyNumber ||
-                            "87985"
-                          }
+                          value={pet?.breederSupplyNumber || "87985"}
                         />
                       </div>
 
@@ -542,9 +473,7 @@ const ReviewSubmit = () => {
 
                 {/* Pets */}
                 {pets.map((pet, index) => {
-                  const colors = getColors(
-                    pet?.colors,
-                  );
+                  const colors = getColors(pet?.colors);
 
                   /*
                   const petType = getPetType(
@@ -621,25 +550,16 @@ const ReviewSubmit = () => {
 
                         {colors.length > 0 ? (
                           <div className="space-y-0.5">
-                            {colors.map(
-                              (
-                                color,
-                                colorIndex,
-                              ) => (
-                                <p
-                                  key={`${color}-${colorIndex}`}
-                                  className="text-[10px] leading-[1.2] text-[#625B55]"
-                                >
-                                  {`Color${
-                                    colorIndex
-                                      ? ` ${colorIndex}`
-                                      : ""
-                                  } - ${
-                                    color || "Brown"
-                                  }`}
-                                </p>
-                              ),
-                            )}
+                            {colors.map((color, colorIndex) => (
+                              <p
+                                key={`${color}-${colorIndex}`}
+                                className="text-[10px] leading-[1.2] text-[#625B55]"
+                              >
+                                {`Color${
+                                  colorIndex ? ` ${colorIndex}` : ""
+                                } - ${color || "Brown"}`}
+                              </p>
+                            ))}
                           </div>
                         ) : (
                           <p className="text-[10px] text-[#625B55]">
@@ -655,9 +575,7 @@ const ReviewSubmit = () => {
                         </p>
 
                         <p className="text-[10px] text-[#625B55]">
-                          {pet?.CARtag ||
-                            pet?.carTag ||
-                            "Text"}
+                          {pet?.CARtag || pet?.carTag || "Text"}
                         </p>
                       </div>
                     </div>
@@ -666,8 +584,7 @@ const ReviewSubmit = () => {
 
                 <div className="flex items-center justify-end gap-3 px-3 pt-3 sm:px-3.5">
                   <span className="text-[11px] font-medium text-[#625B55]">
-                    Total Pet(s) Added :{" "}
-                    {pets.length}
+                    Total Pet(s) Added : {pets.length}
                   </span>
 
                   <button
@@ -689,9 +606,7 @@ const ReviewSubmit = () => {
 
         <div
           className={
-            isIndividualListing ||
-            isMultipleListing ||
-            isLitterListing
+            isIndividualListing || isMultipleListing || isLitterListing
               ? "mt-5 rounded-[5px] bg-white p-4 sm:p-5"
               : "rounded-[5px] bg-white p-4 sm:p-5"
           }
@@ -710,26 +625,21 @@ const ReviewSubmit = () => {
 
                 <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Owner Type
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Owner Type</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {ownerType === "individual"
                         ? "Individual Person"
                         : ownerType === "business"
                           ? "Business"
-                          : ownerType ===
-                              "organisation"
+                          : ownerType === "organisation"
                             ? "Our Organisation"
                             : ownerType || "Text"}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      First Name
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">First Name</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.firstName || "Text"}
@@ -737,9 +647,7 @@ const ReviewSubmit = () => {
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Surname
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Surname</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.surname || "Text"}
@@ -756,20 +664,15 @@ const ReviewSubmit = () => {
 
                 <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Street Address
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Street Address</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
-                      {owner.streetAddress ||
-                        "Text"}
+                      {owner.streetAddress || "Text"}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Suburb
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Suburb</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.suburb || "Text"}
@@ -777,9 +680,7 @@ const ReviewSubmit = () => {
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Postcode
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Postcode</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.postCode || "Text"}
@@ -787,20 +688,15 @@ const ReviewSubmit = () => {
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Municipality
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Municipality</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
-                      {owner.municipality ||
-                        "Text"}
+                      {owner.municipality || "Text"}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      State
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">State</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.state || "Text"}
@@ -808,9 +704,7 @@ const ReviewSubmit = () => {
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Country
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Country</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.country || "Text"}
@@ -827,9 +721,7 @@ const ReviewSubmit = () => {
 
                 <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Home Phone
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Home Phone</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.homePhone || "Text"}
@@ -837,9 +729,7 @@ const ReviewSubmit = () => {
                   </div>
 
                   <div>
-                    <p className="text-[10px] text-[#A49B93]">
-                      Email
-                    </p>
+                    <p className="text-[10px] text-[#A49B93]">Email</p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
                       {owner.email || "Text"}
@@ -861,8 +751,7 @@ const ReviewSubmit = () => {
                     </p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
-                      {owner.alternateContactName ||
-                        "Text"}
+                      {owner.alternateContactName || "Text"}
                     </p>
                   </div>
 
@@ -872,8 +761,7 @@ const ReviewSubmit = () => {
                     </p>
 
                     <p className="mt-1 text-[11px] text-[#514A44]">
-                      {owner.alternateContactNumber ||
-                        "Text"}
+                      {owner.alternateContactNumber || "Text"}
                     </p>
                   </div>
                 </div>
@@ -892,13 +780,10 @@ const ReviewSubmit = () => {
 
               {/* Information */}
               <p className="mx-auto mt-4 max-w-167.5 text-center text-[11px] leading-[1.35] text-[#514A44]">
-                If the First Name, Surname, and
-                Email address you have provided for
-                this owner matches an existing record
-                on our <br />
-                database, we will update this existing
-                record to reflect the information you
-                have provided.
+                If the First Name, Surname, and Email address you have provided
+                for this owner matches an existing record on our <br />
+                database, we will update this existing record to reflect the
+                information you have provided.
               </p>
             </div>
           </section>
@@ -910,31 +795,23 @@ const ReviewSubmit = () => {
 
         <div className="mt-4 px-1">
           <p className="text-[10px] leading-[1.35] text-[#514A44]">
-            By clicking the Agree and Submit button
-            below, you are acknowledging that you
-            believe the owner and pet information
-            entered as part of this subscription is
-            true and correct and that you have read
-            and understood our privacy policy as it
-            appears on car.com.au. You also confirm
-            that the owner authorises Central Animal
-            Records to provide their name and other
-            personal information to other parties, and
-            that you have advised the owner to contact
-            Central Animal Records if they do not wish
-            for their owner and pet information to be
-            passed on to authorised users to enable the
-            return of their pet(s).
+            By clicking the Agree and Submit button below, you are acknowledging
+            that you believe the owner and pet information entered as part of
+            this subscription is true and correct and that you have read and
+            understood our privacy policy as it appears on car.com.au. You also
+            confirm that the owner authorises Central Animal Records to provide
+            their name and other personal information to other parties, and that
+            you have advised the owner to contact Central Animal Records if they
+            do not wish for their owner and pet information to be passed on to
+            authorised users to enable the return of their pet(s).
           </p>
 
           <p className="mt-2 text-[10px] leading-[1.35] text-[#514A44]">
-            Furthermore, you have made the owner aware
-            that they have access to their owner and
-            pet information on Central Animal Records
-            and other national animal microchip
-            registries and may use this information to
-            assist with local council pet registrations
-            and in administration of legislation.
+            Furthermore, you have made the owner aware that they have access to
+            their owner and pet information on Central Animal Records and other
+            national animal microchip registries and may use this information to
+            assist with local council pet registrations and in administration of
+            legislation.
           </p>
         </div>
 

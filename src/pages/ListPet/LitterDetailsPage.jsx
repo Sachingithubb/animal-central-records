@@ -57,6 +57,12 @@ export default function LitterDetailsPage() {
     breederSupplyNumber: false,
   });
 
+   const selectedListingType = useSelector(
+    (state) => state.listing.selectedListingType,
+  );
+
+  // console.log(selectedListingType);
+
   const isInvalid = (fieldName) => {
     return (
       touched[fieldName] &&

@@ -12,7 +12,7 @@ const ManualDetail = ({ ownerType }) => {
   const isEditMode = location.state?.isEditMode === true;
   const owner = ownerDetails[0] || {};
 
-  console.log(ownerType);
+  // console.log(ownerType);
 
   const [formData, setFormData] = useState({
     rescueKennelName: owner.rescueKennelName || "",

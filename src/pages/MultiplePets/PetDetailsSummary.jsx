@@ -50,7 +50,7 @@ export default function PetDetailsSummary() {
 
   const handleNext = () => {
     console.log("hello");
-    
+
     navigate("/list-pet/litter/owner-detail");
   };
 
@@ -58,12 +58,27 @@ export default function PetDetailsSummary() {
     setAddPet(true);
   };
 
-  const handleEdit = () => {
-    
-  };
+  const handleEdit = () => {};
 
   const handleDelete = (pet) => {
     console.log("Delete pet:", pet);
+  };
+
+  const getOrdinal = (number) => {
+    if (number % 100 >= 11 && number % 100 <= 13) {
+      return `${number}th`;
+    }
+
+    switch (number % 10) {
+      case 1:
+        return `${number}st`;
+      case 2:
+        return `${number}nd`;
+      case 3:
+        return `${number}rd`;
+      default:
+        return `${number}th`;
+    }
   };
 
   return (
@@ -281,7 +296,7 @@ export default function PetDetailsSummary() {
                       <button
                         type="button"
                         onClick={() => handleDelete(pet)}
-                        className="flex h-[27px] items-center justify-center rounded-[2px] border border-[#D88A43] bg-white px-4 text-[10px] font-medium text-[#C87829] transition-colors hover:bg-[#FFF5EA]"
+                        className="flex h-6.75 items-center justify-center rounded-xs border border-[#D88A43] bg-white px-4 text-[10px] font-medium text-[#C87829] transition-colors hover:bg-[#FFF5EA]"
                       >
                         Delete
                       </button>
@@ -289,7 +304,7 @@ export default function PetDetailsSummary() {
                       <button
                         type="button"
                         onClick={() => handleEdit(pet)}
-                        className="flex h-[27px] items-center justify-center rounded-[2px] border border-[#D88A43] bg-white px-4 text-[10px] font-medium text-[#C87829] transition-colors hover:bg-[#FFF5EA]"
+                        className="flex h-6.75 items-center justify-center rounded-xs border border-[#D88A43] bg-white px-4 text-[10px] font-medium text-[#C87829] transition-colors hover:bg-[#FFF5EA]"
                       >
                         Edit
                       </button>
@@ -308,28 +323,33 @@ export default function PetDetailsSummary() {
           </div>
 
           {/* ================= BOTTOM ACTIONS ================= */}
-        {!addPet &&  <div className="mt-5">
+          <div className="mt-5">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <button
                 type="button"
                 onClick={handleAddSecondPet}
-                className="h-[40px] w-full rounded-[3px] border border-[#C87829] bg-white text-[13px] font-medium text-[#C87829] transition-colors hover:bg-[#FFF7EE]"
+                className="h-10 w-full rounded-[3px] border border-[#C87829] bg-white text-[13px] font-medium text-[#C87829] transition-colors hover:bg-[#FFF7EE]"
               >
-                Add a 2nd Pet
+                Add a {getOrdinal(pets.length + 1)} Pet
               </button>
 
               <button
                 type="button"
                 onClick={handleNext}
-                className="h-[40px] w-full rounded-[3px] bg-[#C87829] text-[13px] font-medium text-white transition-colors hover:bg-[#B66D24]"
+                className="h-10 w-full rounded-[3px] bg-[#C87829] text-[13px] font-medium text-white transition-colors hover:bg-[#B66D24]"
               >
                 Next
               </button>
             </div>
-          </div> }
+          </div>
         </div>
       </div>
-      {addPet && <MultiplePetsDetails isAddPet={addPet} onCancel={() => setAddPet(false)} /> }
+      {addPet && (
+        <MultiplePetsDetails
+          isAddPet={addPet}
+          onCancel={() => setAddPet(false)}
+        />
+      )}
     </div>
   );
 }
